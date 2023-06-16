@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register Class</title>
+</head>
+<body>
+    <h1>Register Class</h1>
+    {% if error %}
+        <p>{{ error }}</p>
+    {% endif %}
+    {% if success_message %}
+        <p>{{ success_message }}</p>
+    {% endif %}
+    <form method="post" action="/register/class">
+        <label for="name">Class Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+        <input type="submit" value="Register">
+    </form>
+</body>
+</html>

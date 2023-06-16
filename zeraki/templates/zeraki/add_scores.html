@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Scores</title>
+</head>
+<body>
+    <h1>Add Scores</h1>
+    <form method="post" action="/add_scores">
+        <label for="student">Select Student:</label>
+        <select id="student" name="student">
+            {% for student in students %}
+                <option value="{{ student[0] }}">{{ student[1] }}</option>
+            {% endfor %}
+        </select>
+        <br><br>
+        {% for subject in subjects %}
+            <label for="{{ subject[0] }}">{{ subject[1] }}:</label>
+            <input type="number" id="{{ subject[0] }}" name="{{ subject[0] }}" required><br><br>
+        {% endfor %}
+        <input type="submit" value="Submit">
+    </form>
+   
+    
+    <a href="{{ url_for('register_subject', class_id=session['class_id']) }}">Add Subjects</a>
+    <a href="{{ url_for('insert_scores') }}">Insert Scores</a>
+    <a href="{{ url_for('student_scores') }}">View Student Scores</a>
+
+</body>
+</html>

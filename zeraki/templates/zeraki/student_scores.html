@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Scores</title>
+</head>
+<body>
+    <h1>Student Scores</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Student Name</th>
+                {% for subject in subjects %}
+                <th>{{ subject[1] }}</th>
+                {% endfor %}
+                <th>Total Score</th>
+                <th>Mean Score</th>
+                <th>Mean Grade</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in ranked_students %}
+                <tr>
+                    <td>{{ student.rank }}</td>
+                    <td>{{ student.name }}</td>
+                    {% for score in student.scores %}
+                        <td>{{ score }}</td>
+                    {% endfor %}
+                    <td>{{ student.total_score }}</td>
+                    <td>{{ student.mean_score }}</td>
+                    <td>{{ student.mean_grade }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    
+    <p>Class Mean Score: {{ class_mean_score }}</p>
+    <p>Class Mean Grade: {{ class_mean_grade }}</p>
+    
+    
+    <p>Class Mean Score: {{ class_mean_score }}</p>
+    <p>Class Mean Grade: {{ class_mean_grade }}</p>
+    
+
+    <h2>Class Mean Score: {{ class_mean_score|round(2) }}</h2>
+    <h2>Class Mean Grade: {{ calculate_grade(class_mean_score|round(2)) }}</h2>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Dashboard</h1>
+    <h2>Class: {{ class_name }}</h2>
+    <br>
+    <h3>Student Performances</h3>
+    <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Student Name</th>
+            {% for subject in subjects %}
+            <th>{{ subject[1] }}</th>
+            {% endfor %}
+            <th>Total Score</th>
+            <th>Mean Grade</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for student in ranked_students %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ student['name'] }}</td>
+            {% for score in student['scores'] %}
+            <td>{{ score }}</td>
+            {% endfor %}
+            <td>{{ student['total_score'] }}</td>
+            <td>{{ student['mean_grade'] }}</td>
+          </tr>
+          {% endfor %}
+          <tr>
+            <td>Subject Mean Score</td>
+            {% for mean_score in subject_mean_scores %}
+            <td>{{ mean_score }}</td>
+            {% endfor %}
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Class Mean Total Score</td>
+            <td colspan="{{ num_subjects }}">{{ class_mean_total_score }}</td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Class Mean Mean Score</td>
+            <td colspan="{{ num_subjects }}">{{ class_mean_mean_score }}</td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Class Mean Grade</td>
+            <td colspan="{{ num_subjects }}">{{ class_mean_grade }}</td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>School Mean Total Score</td>
+            <td colspan="{{ num_subjects }}"></td>
+            <td>{{ school_mean_total_score }}</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>School Mean Mean Score</td>
+            <td colspan="{{ num_subjects }}"></td>
+            <td>{{ school_mean_mean_score }}</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>School Mean Grade</td>
+            <td colspan="{{ num_subjects }}"></td>
+            <td>{{ school_mean_grade }}</td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+      
+    <br>
+   
+</body>
+</html>

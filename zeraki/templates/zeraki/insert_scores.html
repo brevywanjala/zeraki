@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Insert Scores</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.28.0/dist/apexcharts.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.28.0/dist/apexcharts.min.js"></script>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <style>
+    #chartContainer {
+      margin-top: 20px;
+    }
+  </style>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+        
+        td {
+            color: #333;
+        }
+        
+        .dark-mode th {
+            color: #f5f5f5;
+            background-color: #333;
+        }
+        
+        .input-container {
+            position: relative;
+        }
+        
+        .score-input {
+            width: 50px;
+            padding: 5px;
+            border: 1px solid #ddd;
+        }
+        
+        .completion-icon {
+            text-align: center;
+        }
+        
+        .completed {
+            background-color: #d7f0d7 !important;
+        }
+        
+        .completed .score-input {
+            background-color: #d7f0d7;
+        }
+        
+        button[type="submit"] {
+            display: block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+        
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        
+        .dark-mode {
+            background-color: #333 !important;
+            color: #f5f5f5 !important;
+        }
+        
+        .dark-mode button[type="submit"] {
+            background-color: #26a69a;
+        }
+        
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+        
+        .toggle-label {
+            margin-right: 10px;
+            font-size: 14px;
+        }
+        
+        .toggle-switch {
+            display: inline-block;
+            position: relative;
+            width: 40px;
+            height: 20px;
+            background-color: #ccc;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: #fff;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s ease;
+        }
+        
+        .toggle-switch.dark-mode::after {
+            transform: translateX(20px);
+        }
+        /* ... previous CSS code ... */
+        /* ... previous CSS code ... */
+
+        td:first-child {
+            position: relative;
+        }
+        
+        .dark-mode td:first-child {
+            background-color: #f1c40f;
+            padding: 5px 10px;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .dark-mode td:first-child::before,
+        .dark-mode td:first-child::after {
+            content: "";
+            position: absolute;
+            width: calc(100% + 8px);
+            height: calc(100% + 8px);
+            border: 2px solid #fff;
+            border-radius: 25px;
+            top: -4px;
+            left: -4px;
+            z-index: -1;
+        }
+        
+        .dark-mode td:first-child::before {
+            filter: blur(4px);
+        }
+        
+        /* ... remaining CSS code ... */
+        
+        /* ... remaining CSS code ... */
+        
+        
+
+        
+    </style>
+    <script>
+        function checkRowCompletion(row) {
+            var inputs = row.getElementsByClassName('score-input');
+            var isRowCompleted = true;
+
+            for (var i = 0; i < inputs.length; i++) {
+                if (inputs[i].value === '') {
+                    isRowCompleted = false;
+                    break;
+                }
+            }
+
+            var completionCell = row.querySelector('.completion-icon');
+            if (isRowCompleted) {
+                row.classList.add('completed');
+                completionCell.innerHTML = '<i class="fas fa-check-circle"></i>';
+            } else {
+                row.classList.remove('completed');
+                completionCell.innerHTML = '';
+            }
+        }
+
+        function toggleDarkMode() {
+            var body = document.body;
+            body.classList.toggle('dark-mode');
+        }
+
+        window.addEventListener('DOMContentLoaded', function () {
+            var rows = document.getElementsByTagName('tr');
+
+            for (var i = 1; i < rows.length; i++) {
+                var inputs = rows[i].getElementsByClassName('score-input');
+
+                for (var j = 0; j < inputs.length; j++) {
+                    inputs[j].addEventListener('input', function () {
+                        checkRowCompletion(this.parentElement.parentElement);
+                    });
+                }
+            }
+        });
+    </script>
+</head>
+<body>
+    <div class="toggle-container">
+        <span class="toggle-label">Dark Mode:</span>
+        <label class="toggle-switch">
+            <input type="checkbox" onclick="toggleDarkMode()">
+            <span class="toggle-slider"></span>
+        </label>
+    </div>
+  <!-- insert_scores.html -->
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+  <div class="flash-messages">
+    {% for message in messages %}
+      <div class="flash-message">{{ message }}</div>
+    {% endfor %}
+  </div>
+{% endif %}
+{% endwith %}
+
+    <h1>Insert Scores</h1>
+
+    <form method="POST" action="{{ url_for('insert_scores') }}">
+        <table>
+            <thead>
+                <tr>
+                    <th>Students</th>
+                    {% for subject in subjects %}
+                    <th>{{ subject[1] }}</th>
+                    {% endfor %}
+                    <th>Completion</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                <tr>
+                    <td>{{ student[1] }}</td>
+                    {% for subject in subjects %}
+                    <td class="input-container">
+                        <input type="number" name="score_{{ student[0] }}_{{ subject[0] }}" min="0" max="100" required class="score-input">
+                    </td>
+                    {% endfor %}
+                    <td class="completion-icon"></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="submit">Submit</button>
+    </form>
+    <form action="/get_scores_by_timestamp" method="GET">
+        <label for="start_date">Start Date:</label>
+        <input type="date" id="start_date" name="start_date" required>
+    
+        <label for="end_date">End Date:</label>
+        <input type="date" id="end_date" name="end_date">
+    
+        <input type="submit" value="Submit">
+      </form>
+    
+      <div id="chartContainer"></div>
+      
+    
+    
+      <script src="https://code.highcharts.com/modules/boost.js"></script>
+      <script src="https://code.highcharts.com/modules/exporting.js"></script>
+      <script src="https://code.highcharts.com/modules/export-data.js"></script>
+      <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      
+
+</body>
+</html>

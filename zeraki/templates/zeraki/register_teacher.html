@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teacher Registration</title>
+</head>
+<body>
+    <h1>Teacher Registration</h1>
+    {% if error %}
+        <p>{{ error }}</p>
+    {% endif %}
+    {% if success_message %}
+        <p>{{ success_message }}</p>
+    {% endif %}
+    <form method="post" action="/register/teacher">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required><br><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br><br>
+        <label for="class_id">Class:</label>
+        <select id="class_id" name="class_id">
+            {% for class in classes %}
+                <option value="{{ class[0] }}">{{ class[1] }}</option>
+            {% endfor %}
+        </select><br><br>
+        <input type="submit" value="Register">
+    </form>
+</body>
+</html>

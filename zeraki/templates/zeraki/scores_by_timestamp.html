@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scores by Timestamp</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: #f2f2f2;
+        }
+        
+        .chart-container {
+            width: 800px;
+            height: 400px;
+            margin-top: 20px;
+        }
+    </style>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <h2>Scores by Timestamp</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                {% for subject in subjects %}
+                    <th>{{ subject[1] }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in range(timestamps|length) %}
+                <tr>
+                    <td>{{ timestamps[i] }}</td>
+                    {% for j in range(subjects|length) %}
+                        <td>{{ scores[i][j] }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <div class="chart-container">
+        <h2>Scores by Timestamp (Bar Graph)</h2>
+        <div id="barChart"></div>
+    </div>
+        
+    <script>
+        var subjects = {{ subjects|tojson }};
+        var timestamps = {{ timestamps|tojson }};
+        var scores = {{ scores|tojson }};
+
+        // Calculate sum of scores per subject for each timestamp
+        var sumScores = [];
+        for (var i = 0; i < scores.length; i++) {
+            var sumScoresPerTimestamp = [];
+            for (var j = 0; j < subjects.length; j++) {
+                var sum = scores[i][j].reduce(function (a, b) { return a + b; }, 0);
+                sumScoresPerTimestamp.push(sum);
+            }
+            sumScores.push(sumScoresPerTimestamp);
+        }
+
+        // Create traces for bar graph
+        var barTraces = [];
+        for (var i = 0; i < timestamps.length; i++) {
+            var trace = {
+                x: subjects.map(function (subject) { return subject[1]; }),
+                y: sumScores[i],
+                type: 'bar',
+                name: 'Timestamp: ' + timestamps[i],
+                marker: {
+                    color: 'rgba(0, 0, 255, ' + (1 / timestamps.length) * (i + 1) + ')',
+                    line: {
+                        color: 'rgba(0, 0, 0, 1)',
+                        width: 1
+                    }
+                }
+            };
+            barTraces.push(trace);
+        }
+
+        // Create layout for bar graph
+        var barLayout = {
+            title: 'Scores by Timestamp (Bar Graph)',
+            xaxis: { title: 'Subjects' },
+            yaxis: { title: 'Total Scores' }
+        };
+
+        // Create bar graph
+        Plotly.newPlot('barChart', barTraces, barLayout);
+    </script>
+</body>
+</html>
